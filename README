@@ -1,7 +1,11 @@
 Home Control is an universal remote control application for webOS. Home Control
-has support for direct control of few applications / set top boxes. Most of
-the supported applications / devices can be controlled through a Home Control
-server application that can be fetched from NPM repository:
+has support for direct control of few applications / set top boxes, but most
+features needs a server application. Home Control server application can be 
+installed from NPM repository with the following command:
 
   npm install hc-server
+
+For currently supported features and information see the official wiki page:
+
+  http://www.webos-internals.org/wiki/Application:HomeControl
 
