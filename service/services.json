@@ -1,0 +1,28 @@
+{
+    "id": "org.webosinternals.homecontrol.service",
+    "description": "HomeControl Service",
+    "engine": "node",
+    "activityTimeout" : 120,
+    "commandTimeout": 120,
+    "services": [
+        {
+            "name": "org.webosinternals.homecontrol.service",
+            "description": "UPnP Discovery and Control",
+            "globalized": false,
+            "commands": [
+                {
+                    "name": "discover",
+                    "assistant": "DiscoverAssistant",
+                    "public": true,
+                    "subscribe": true
+                },
+                {
+                    "name": "sendCommand",
+                    "assistant": "CommandAssistant",
+                    "public": true,
+                    "subscribe": true
+                }
+            ]
+        }
+    ]
+}

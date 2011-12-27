@@ -1,0 +1,11 @@
+[
+   {
+      "library":{
+         "name":"foundations",
+         "version":"1.0"
+      }
+   },
+   
+   { "source": "prologue.js" },
+   { "source": "assistants/ServiceCommandAssistant.js" }
+]

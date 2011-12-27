@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Home Control</title>
+
+		<meta name="viewport" content="height=device-height" />
+	
+		<script src="/usr/palm/frameworks/enyo/1.0/framework/enyo.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var dockMode = enyo.windowParams && enyo.windowParams.dockMode;		
+
+			if(!dockMode)
+				enyo.windows.openWindow("main.html", "main", {dockMode: false});
+			else
+				enyo.windows.openWindow("main.html", "dock", {dockMode: true}, {window: "dockMode"});
+
+			enyo.application = {
+				applicationRelaunchHandler: function(params) {
+					enyo.windows.activate("main.html", "main", {dockMode: false});
+				}
+			};
+		</script>
+	</body>
+</html>

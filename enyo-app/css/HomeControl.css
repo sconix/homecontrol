@@ -1,0 +1,200 @@
+.keyboard-input {
+	text-align: center;
+}
+
+.tool-button {
+	margin: -13px -10px;
+}
+
+.divider {
+	margin-bottom: -8px;
+}
+
+.divider-content {
+	padding: 5px 15px;
+}
+
+.divider-container {
+	max-width: 290px;
+	margin: auto auto;
+}
+
+.divider-container-box {
+	margin: 0px -2px 0px 10px;
+	border-style: groove;
+	min-height: 8px;
+}
+
+.list-view-item {
+	margin: -6px 0px 12px 0px;
+	padding: 0px;
+}
+
+.list-view-title {
+	max-height: 20px;
+	margin: 8px 0px 12px 5px;
+	font-size: 15px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.list-view-subtitle {
+	max-height: 16px;
+	margin: 6px 5px 10px 5px;
+	font-size: 12px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.current-info {
+	font-weight: bold;
+	font-size: 18px;
+	max-height: 24px; 
+	white-space: nowrap; 
+	margin: -8px 0px 7px 0px;
+	overflow: hidden;
+	-webkit-marquee-direction: left;
+	-webkit-marquee-speed: fast;
+	-webkit-marquee-increment: small;
+}
+
+.control-pad-box {
+	float: left;
+	margin: -10px auto 5px auto;
+	max-height: 150px; 
+	max-width: 150px;
+	position:relative;
+}
+
+.control-pad-mouse {
+	margin: 5px 0px 5px 0px; 
+	border-radius: 20px; 
+	border-style: groove;"
+}
+
+.control-up .enyo-button-icon {
+	position: absolute;
+	top: 0px;
+	left: 16px;
+	width: 96px;
+	height: 48px;
+}
+
+.control-up .enyo-button-down .enyo-button-icon {
+	background-position: 0 -48px;
+}
+
+.control-left .enyo-button-icon {
+	position: absolute;
+	top: 30px;
+	left: -15px;
+	width: 48px;
+	height: 96px;
+}
+
+.control-left .enyo-button-down .enyo-button-icon {
+	background-position: 0 -96px;
+}
+
+.control-ok .enyo-button-icon {
+	position: absolute;
+	top: 29px;
+	left: 16px;
+	width: 96px;
+	height: 96px;
+}
+
+.control-ok .enyo-button-down .enyo-button-icon {
+	background-position: 0 -96px;
+}
+
+.control-right .enyo-button-icon {
+	position: absolute;
+	top: 30px;
+	left: 94px;
+	width: 48px;
+	height: 96px;
+}
+
+.control-right .enyo-button-down .enyo-button-icon {
+	background-position: 0 -96px;
+}
+
+.control-down .enyo-button-icon {
+	position: absolute;
+	top: 108px;
+	left: 16px;
+	width: 96px;
+	height: 48px;
+}
+
+.control-down .enyo-button-down .enyo-button-icon {
+	background-position: 0 -48px;
+}
+
+.control-repeat .enyo-toggle-button-bar {
+	min-width: 70px;
+	margin-left: -10px;
+}
+
+.control-random .enyo-toggle-button-bar {
+	min-width: 70px;
+	margin-left: -48px;
+}
+
+.control-mute .enyo-toggle-button-bar {
+	min-width: 70px;
+	margin-left: -48px;
+}
+
+.control-volume {
+	margin: -3px 0px -9px 0px;
+}
+
+.control-progress {
+	margin: -19px 0px -11px 0px;
+}
+
+.control-mute .enyo-button-icon {
+	margin-left: 0px;
+	margin-right: -4px;
+	margin-top: 95px;
+}
+
+.control-back .enyo-button-icon {
+	margin-left: -4px;
+	margin-right: 0px;
+	margin-top: 95px;
+}
+
+.control-key.enyo-button-dark {
+	padding: 0px 8px 2px 8px;
+	line-height: 20px;
+	min-height: 16px;
+	margin: -5px 0px 6px 0px;	
+}
+
+.control-key-half.enyo-button-dark {
+	padding: 0px 8px 2px 8px;
+	line-height: 20px;
+	min-height: 16px;
+	margin: 2px -1px;
+}
+
+.control-first {
+	margin: -1px -6px -1px 0px;
+}
+
+.control-middle {
+	margin: -1px 0px -1px 0px;
+}
+
+.control-last {
+	margin: -1px 0px -1px -6px;
+}
+
+.custom-divider {
+	background: url(../images/divider.png) left center repeat-x;
+}
+
+

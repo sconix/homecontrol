@@ -1,0 +1,5 @@
+build/*
+server/data/graphs/*
+server/data/sensors/*
+server/data/upload/*
+server/node_modules

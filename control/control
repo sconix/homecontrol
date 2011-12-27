@@ -1,0 +1,9 @@
+Package: org.e.lnx.wee.homecontrol
+Version: 0.8.2
+Architecture: all
+Size: 0
+Description: Home Control
+Maintainer: Janne Julkunen <janne.julkunen@wee.e-lnx.org>
+Section: misc
+Priority: optional
+Source: { "Feed":"Enlightened Linux Applications", "Type":"Application", "Category":"System Utilities", "LastUpdated":"0000000000", "Title":"Home Control", "FullDescription":"", "Homepage":"", "Icon":"", "Screenshots":[], "License":"BSD License", "MinWebOSVersion": "2.1.0" }

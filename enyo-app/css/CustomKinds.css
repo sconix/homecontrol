@@ -1,0 +1,59 @@
+.custom-page-header {
+	margin: -0.4em 0 0 0;
+}
+
+.custom-page-header .icon {
+	margin: 0 0 -2em -0.5em;
+	width: 3em;
+}
+
+.custom-page-header.large-icon {
+	margin: -0.4em 0 0 -2.5em;
+}
+
+.custom-page-header.large-icon .icon {
+	margin: -1.5em 0 -3em 0;
+	width: 5em;
+}
+
+.custom-page-header .text {
+	margin-top: -0.2em;
+	padding-left: 0.3em;
+}
+
+.custom-page-header .text .title {
+	margin-top: 0.15em;
+	font-size: 1.5em;
+}
+
+.custom-page-header .text .version {
+	margin-left: 0.6em;
+	margin-top: 1.4em;
+	font-size: 0.7em;
+	white-space: nowrap;
+	overflow: hidden;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-page-header .text .tagline {
+	margin-left: 0.15em;
+	margin-top: -0.2em;
+	width: 100%;
+	font-size: 0.7em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: rgba(0, 0, 0, 0.7);
+}
+
+.custom-sliding-tag {
+	margin-top: -2px;
+	position: absolute;
+	z-index: 3;
+	height: 50px;
+	width: 26px;
+	top: 80px;
+	left: -26px;
+	background: url(../images/sliding-tag.png) right center no-repeat;
+}
+
