@@ -49,7 +49,7 @@ exports.setup = function(cb, os) {
 	if(os == "linux") {
 		var child = exec("mpd --help", function(error, stdout, stderr) {
 			if(!error) {
-				require("mpd");
+				require("../node-mpd.js");
 
 				mpd = new MPD();
 

@@ -11,7 +11,7 @@ config.password = "hcpass";
 
 // Port number for the service discovery, default: 1900
 
-config.ssd_port = 1900;
+config.ssdp_port = 1930;
 
 // Port number for the control connections, default: 3000
 

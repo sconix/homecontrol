@@ -56,7 +56,7 @@ var hcdata = require('./lib/data-types.js');
 var loaded = [];
 
 var modules = ["app/banshee", "app/frontrow", "app/itunes", "app/mpd", 
-	"app/quicktime", "app/rhythmbox", "app/totem",
+	"app/quicktime", "app/rhythmbox", "app/totem", "app/winamp",
 	"sys/1-wire", "sys/input", "sys/sound", "sys/surveillance"];
 
 //
@@ -66,15 +66,15 @@ var modules = ["app/banshee", "app/frontrow", "app/itunes", "app/mpd",
 console.log("Home Control server: starting");
 
 //
-// CREATE SSD SERVER
+// CREATE SSDP SERVER
 //
 
-if(isNaN(parseInt(config.ssd_port))) {
-	console.log("Invalid port set for SSD in config.js!");
+if(isNaN(parseInt(config.ssdp_port))) {
+	console.log("Invalid port set for SSDP in config.js!");
 	return;
 }
 
-console.log("SSD listening port: " + config.ssd_port);
+console.log("SSDP listening port: " + config.ssdp_port);
 
 var socket = net.createConnection(80, 'www.google.com');
 
@@ -84,7 +84,7 @@ socket.on('connect', function() {
 	var ssd_srv = dgram.createSocket("udp4");
 
 	ssd_srv.on("message", function (msg, rinfo) {
-		console.log("Received SSD message: " + rinfo.address + ":" + rinfo.port);
+		console.log("Received SSDP message: " + rinfo.address + ":" + rinfo.port);
 	
 		if(msg.slice(0, 8) == "M-SEARCH") {
 			var message = new Buffer(
@@ -96,7 +96,7 @@ socket.on('connect', function() {
 				"\r\n"
 			);
 
-			console.log("Sending SSD message: " + addr + ":" + config.http_port);
+			console.log("Sending SSDP message: " + addr + ":" + config.http_port);
 
 			var client = dgram.createSocket("udp4");
 
@@ -106,7 +106,7 @@ socket.on('connect', function() {
 		}
 	});
 
-	ssd_srv.bind(config.ssd_port);
+	ssd_srv.bind(config.ssdp_port);
 
 	try {
 		ssd_srv.addMembership('239.255.255.250');

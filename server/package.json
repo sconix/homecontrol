@@ -1,17 +1,20 @@
 {
   "name": "hc-server",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "author": "Janne Julkunen <scorpio.iix@gmail.com>",
   "description": "Server application for Home Control client application (for webOS).",
   "keywords": [ "Home Control", "webOS" ],
   "homepage": "http://www.webos-internals.org/wiki/Application:HomeControl",
+  "repository": {
+    "type": "git", 
+    "url": "http://github.com/sconix/homecontrol.git" 
+  },
   "licenses": [ { "type": "BSD" } ],
   "dependencies": {
     "applescript": "0.x.x",
     "connect-form": "0.x.x",
     "express": "2.x.x",
 		"http-auth": "1.x.x",
-		"mpd": "0.0.1",
 		"x11": "0.0.4"
   },
   "engines": { "node": "*" },
