@@ -55,7 +55,8 @@ var hcdata = require('./lib/data-types.js');
 
 var loaded = [];
 
-var modules = ["app/banshee", "app/frontrow", "app/itunes", "app/mpd", 
+var modules = ["app/amarok", "app/banshee", "app/frontrow", 
+	"app/itunes", "app/mpd", 
 	"app/quicktime", "app/rhythmbox", "app/totem", "app/winamp",
 	"sys/1-wire", "sys/input", "sys/sound", "sys/surveillance"];
 

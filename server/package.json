@@ -1,6 +1,6 @@
 {
   "name": "hc-server",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "author": "Janne Julkunen <scorpio.iix@gmail.com>",
   "description": "Server application for Home Control client application (for webOS).",
   "keywords": [ "Home Control", "webOS" ],

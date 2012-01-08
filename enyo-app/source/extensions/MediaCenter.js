@@ -61,10 +61,10 @@ enyo.kind({
 						]}
 					]},
 					{layoutKind: "VFlexLayout", flex: 1, pack: "center", className: "divider-content", components: [
-						{layoutKind: "HFlexLayout", className: "divider-container", components: [
+						{layoutKind: "HFlexLayout", pack: "center",className: "divider-container", components: [
 							{name: "controlMute", kind: "ToolButton", className: "control-mute", icon: "./images/ctl-mute.png", 
 								onclick: "controlDevice"},
-							{layoutKind: "VFlexLayout", flex: 1, components: [
+							{layoutKind: "VFlexLayout", style: "width: 122px;", components: [
 								{layoutKind: "VFlexLayout", pack: "center", className: "control-pad-box", components: [
 									{name: "controlOk", kind: "ToolButton", className: "control-ok", icon: "./images/ctl-ok.png", 
 										onclick: "controlDevice"},

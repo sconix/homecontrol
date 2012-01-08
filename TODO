@@ -4,6 +4,7 @@
   - fix and finalize the touchpad surveillance extension
   - enable cisco ip cam support
   - clean the surveillance extension
+	- power controller (shutdown / reboot in x mins, now)
 
 0.9.0
 

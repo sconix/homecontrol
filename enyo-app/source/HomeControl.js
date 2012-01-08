@@ -201,7 +201,7 @@ enyo.kind({
 						{name: "controlItems", layoutKind: "VFlexLayout", flex: 1, components: []},
 
 						{name: "primaryToolbar", kind: "Toolbar", pack: "left", className: "enyo-toolbar-light", components: [
-							{name: "moreLeft", kind: "ToolButton", icon: "./images/button-more.png", onclick: "updatePrimary"},
+							{name: "moreLeft", kind: "ToolButton", icon: "./images/button-more.png", onclick: "updateViewMenus"},
 							{kind: "Spacer", flex: 1},
 							{name: "addButton", kind: "ActivityButton", caption: "Add New Controller", onclick: "addNewController"},
 							{kind: "Spacer", flex: 1},
@@ -239,7 +239,7 @@ enyo.kind({
 						{name: "controlIcons", layoutKind: "VFlexLayout", flex: 1, components: []},
 				
 						{name: "secondaryToolbar", kind: "Toolbar", pack: "left", className: "enyo-toolbar-light", components: [
-							{name: "more", kind: "ToolButton", icon: "./images/button-more.png", onclick: "updateSecondary"}
+							{name: "more", kind: "ToolButton", icon: "./images/button-more.png", onclick: "updateViewMenus"}
 						]}
 					]}
 				]}
@@ -340,14 +340,28 @@ enyo.kind({
 
 			this.$.defaultView.applyStyle("width", (size.w - 64) + "px");
 		} else {
-			if(size.w < 1024)
+			if(size.w < 1024) {
 				this._ui = "default";
-			
-			this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
+				
+				if((this._selectedPrimary != -1) && (this._selectedSecondary != -1)) {
+					this.$.defaultView.setPeekWidth(64);
 
-			this.$.defaultView.setPeekWidth(320);
-		
-//			this.$.right.setPeekWidth(size.w - 320 + 64);
+					this.$.defaultView.applyStyle("width", (size.w - 128) + "px");
+
+					this.$.appPane.selectViewByIndex(1);			
+				} else {
+					this.$.defaultView.setPeekWidth(320);
+	
+					this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
+				}
+			} else {
+				this.$.defaultView.setPeekWidth(320);
+
+				this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
+
+				if((this._selectedPrimary != -1) && (this._selectedSecondary != -1))
+					this.$.appPane.selectViewByIndex(1);			
+			}
 		}
 	},
 	
@@ -362,6 +376,10 @@ enyo.kind({
 		if((this._ui == "compact") && (this.$.appPane.getViewIndex() > 0)) {
 			if(inEvent)
 				enyo.stopEvent(inEvent);
+
+			this.$["extensionView" + this._selectedPrimary].selected(false);
+
+			this.$["extensionIcon" + this._selectedPrimary].setSrc(this._selectedPrimaryIcon);				
 
 			this._selectedPrimary = -1;
 
@@ -382,11 +400,23 @@ enyo.kind({
 			this.$.secondaryController.hide();
 			this.$.secondaryTag.hide();
 
-			this.$["extensionViewAlt" + this._selectedSecondary].selected(false);
+			if(this._ui != "compact") {
+				this.$["extensionViewAlt" + this._selectedSecondary].selected(false);
 
-			this.$["extensionIconAlt" + this._selectedSecondary].setSrc(this._selectedSecondaryIcon);				
+				this.$["extensionIconAlt" + this._selectedSecondary].setSrc(this._selectedSecondaryIcon);				
+			}
 
 			this._selectedSecondary = -1;
+
+			if(this._ui == "default") {
+				this.$.appPane.selectViewByIndex(1);			
+
+				var size = enyo.fetchControlSize(this);
+							
+				this.$.defaultView.setPeekWidth(320);
+
+				this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
+			}
 		} else if(this._selectedPrimary != -1) {
 			this.$.primaryController.hide();			
 			this.$.primaryTag.hide();
@@ -431,13 +461,43 @@ enyo.kind({
 
 	setupExtensions: function() {
 		var size = enyo.fetchControlSize(this);
+		
+// HACK - should be fixed, but for some reason can not call updateViewMenus here
+
+		if(this._ui != "compact") {
+			if(this._selectedSecondary != -1) {
+				this.$.secondaryController.hide();
+				this.$.secondaryTag.hide();
+
+				if(this.$["extensionViewAlt" + this._selectedSecondary])
+					this.$["extensionViewAlt" + this._selectedSecondary].selected(false);
+
+				this._selectedSecondary = -1;
+			}
+		
+			if(this._selectedPrimary != -1) {
+				this.$.primaryController.hide();			
+				this.$.primaryTag.hide();
+
+				if(this.$["extensionViewAlt" + this._selectedPrimary])
+					this.$["extensionView" + this._selectedPrimary].selected(false);
+
+				this._selectedPrimary = -1;
+			}
+
+			this.$.defaultPane.selectViewByIndex(0);
+		}
+
+// HACK END
 
 		var maxItems = Math.round((size.h - 188) / 34);
 
 		if(this._config.length <= maxItems) {
+			this.$.more.hide();
 			this.$.moreLeft.hide();
 			this.$.moreRight.hide();
 		} else {
+			this.$.more.show();
 			this.$.moreLeft.show();
 			this.$.moreRight.show();
 		}
@@ -449,11 +509,13 @@ enyo.kind({
 			if(this.$["extensionView" + i])
 				this.$["extensionView" + i].destroy();
 
-			if(this.$["extensionItemAlt" + i])
-				this.$["extensionItemAlt" + i].destroy();
+			if(this._ui != "compact") {
+				if(this.$["extensionItemAlt" + i])
+					this.$["extensionItemAlt" + i].destroy();
 
-//			if(this.$["altExtensionView" + i])
-//				this.$["altExtensionView" + i].destroy();
+				if(this.$["extensionViewAlt" + i])
+					this.$["extensionViewAlt" + i].destroy();
+			}
 		}
 
 		for(var i = 0; i < this._config.length; i++) {
@@ -466,13 +528,15 @@ enyo.kind({
 						{name: "extensionStatus" + i, content: this._config[i].status, className: "enyo-label", style: "color: gray;margin-right: 10px;"}
 				]}, {owner: this});
 
-			this.$.controlIcons.createComponent(
-				{name: "extensionItemAlt" + i, kind: "SwipeableItem", layoutKind: "HFlexLayout", tapHighlight: true, 
-					view: i, onclick: "updateSecondaryView", align: "center", 
-					style: "padding: 0px 10px; min-height: 24px; max-height: 56px;", flex: 1, components: [
-						{name: "extensionIconAlt" + i, kind: "Image", src: this._config[i].icon, style: "margin: 0px 18px -3px 5px;"}
-				]}, {owner: this});
-
+			if(this._ui != "compact") {
+				this.$.controlIcons.createComponent(
+					{name: "extensionItemAlt" + i, kind: "SwipeableItem", layoutKind: "HFlexLayout", tapHighlight: true, 
+						view: i, onclick: "updateSecondaryView", align: "center", 
+						style: "padding: 0px 10px; min-height: 24px; max-height: 56px;", flex: 1, components: [
+							{name: "extensionIconAlt" + i, kind: "Image", src: this._config[i].icon, style: "margin: 0px 18px -3px 5px;"}
+					]}, {owner: this});
+			}
+			
 			if(i >= maxItems)
 				this.$["extensionItem" + i].hide();
 
@@ -480,7 +544,7 @@ enyo.kind({
 				title: this._config[i].title, module: this._config[i].module, address: this._config[i].address,
 				flex: 1, onUpdate: "updateStatus"}, {owner: this});
 
-			if(this._ui == "normal") {
+			if(this._ui != "compact") {
 				this.$.secondaryController.createComponent({name: "extensionViewAlt" + i, kind: this._config[i].extension, 
 					title: this._config[i].title, module: this._config[i].module, address: this._config[i].address,
 					flex: 1}, {owner: this});
@@ -495,9 +559,9 @@ enyo.kind({
 		this.$.secondaryController.render();
 	},
 
-	updatePrimary: function() {
+	updateViewMenus: function() {
 		var size = enyo.fetchControlSize(this);
-			
+					
 		var maxItems = Math.round((size.h - 188) / 34);
 
 		if(this._index == 0) {
@@ -507,10 +571,17 @@ enyo.kind({
 		}
 
 		for(var i = 0; i < this._config.length; i++) {
-			if((i < this._index) || (i >= (this._index + maxItems)))
+			if((i < this._index) || (i >= (this._index + maxItems))) {
 				this.$["extensionItem" + i].hide();
-			else
+
+				if(this._ui != "compact")
+					this.$["extensionItemAlt" + i].hide();
+			} else {
 				this.$["extensionItem" + i].show();			
+
+				if(this._ui != "compact")
+					this.$["extensionItemAlt" + i].show();			
+			}
 		}
 		
 		if(this.$.appPane.getViewIndex() == 1) {
@@ -523,15 +594,31 @@ enyo.kind({
 			
 				this.$.primaryTag.setPosition(item.getOffset().top + ((item.hasNode().clientHeight - 50) / 2) + 2);
 			}
-		}
-	},
-	
-	updateSecondary: function() {
 
+			if(this._ui != "compact") {
+				if((this._selectedSecondary < this._index) || (this._selectedSecondary >= (this._index + maxItems))) {
+					this.$.secondaryTag.hide();
+				} else {
+					this.$.secondaryTag.show();
+							
+					var item = this.$["extensionItemAlt" + this._selectedSecondary];
+			
+					this.$.secondaryTag.setPosition(item.getOffset().top + ((item.hasNode().clientHeight - 50) / 2) + 2);
+				}
+			}
+		}
 	},
 	
 	updatePrimaryView: function(inSender) {
 		this.$.defaultPane.selectViewByIndex(1);
+
+		if((this._ui == "default") && (this._selectedSecondary != -1)) {
+			var size = enyo.fetchControlSize(this);
+				
+			this.$.defaultView.setPeekWidth(64);
+
+			this.$.defaultView.applyStyle("width", (size.w - 128) + "px");
+		}		
 		
 		if((inSender.view == this._selectedPrimary) && (!this._off["extensionView" + inSender.view])) {
 			this.handleBackEvent();
@@ -546,11 +633,13 @@ enyo.kind({
 
 			this.$["extensionStatus" + inSender.view].setContent("off");
 			
-			this.$["extensionViewAlt" + inSender.view].selected(null);
+			if(this._ui != "compact") {
+				this.$["extensionViewAlt" + inSender.view].selected(null);
 
-			this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "0.5");
+				this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "0.5");
 
-			this.$["extensionIconAlt" + inSender.view].setSrc(this._selectedPrimaryIcon);
+				this.$["extensionIconAlt" + inSender.view].setSrc(this._selectedPrimaryIcon);
+			}
 		} else {
 			if(this._selectedPrimary != this._selectedSecondary) {
 				if(this._off["extensionView" + inSender.view])
@@ -573,12 +662,13 @@ enyo.kind({
 
 			this.$["extensionIcon" + inSender.view].setSrc("./images/icon-power.png");
 
-			this.$["extensionViewAlt" + inSender.view].selected(true);
+			if(this._ui != "compact") {
+				this.$["extensionViewAlt" + inSender.view].selected(true);
 
-			this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "1.0");
+				this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "1.0");
 
-			if(inSender.view == this._selectedSecondary) {
-				this.$["extensionIconAlt" + inSender.view].setSrc("./images/icon-power.png");
+				if(inSender.view == this._selectedSecondary)
+					this.$["extensionIconAlt" + inSender.view].setSrc("./images/icon-power.png");
 			}
 
 			this._selectedPrimary = inSender.view;
@@ -597,6 +687,14 @@ enyo.kind({
 	updateSecondaryView: function(inSender) {
 		this.$.defaultPane.selectViewByIndex(1);
 		
+		if((this._ui == "default") && (this._selectedPrimary != -1)) {
+			var size = enyo.fetchControlSize(this);
+			
+			this.$.defaultView.setPeekWidth(64);
+
+			this.$.defaultView.applyStyle("width", (size.w - 128) + "px");
+		}		
+		
 		if((inSender.view == this._selectedSecondary) && (!this._off["extensionView" + inSender.view])) {
 			this.handleBackEvent();
 
@@ -610,11 +708,13 @@ enyo.kind({
 
 			this.$["extensionStatus" + inSender.view].setContent("off");
 			
-			this.$["extensionViewAlt" + inSender.view].selected(null);
+			if(this._ui != "compact") {
+				this.$["extensionViewAlt" + inSender.view].selected(null);
 
-			this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "0.5");
+				this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "0.5");
 
-			this.$["extensionIconAlt" + inSender.view].setSrc(this._selectedSecondaryIcon);
+				this.$["extensionIconAlt" + inSender.view].setSrc(this._selectedSecondaryIcon);
+			}
 		} else {
 			if(this._selectedPrimary != this._selectedSecondary) {
 				if(this._off["extensionView" + inSender.view])
@@ -624,9 +724,11 @@ enyo.kind({
 			}
 
 			if(this._selectedSecondary != -1) {
-				this.$["extensionViewAlt" + this._selectedSecondary].selected(false);
+				if(this._ui != "compact") {
+					this.$["extensionViewAlt" + this._selectedSecondary].selected(false);
 
-				this.$["extensionIconAlt" + this._selectedSecondary].setSrc(this._selectedSecondaryIcon);				
+					this.$["extensionIconAlt" + this._selectedSecondary].setSrc(this._selectedSecondaryIcon);				
+				}
 			}
 
 			this.$["extensionView" + inSender.view].selected(true);
@@ -637,13 +739,15 @@ enyo.kind({
 				this.$["extensionIcon" + inSender.view].setSrc("./images/icon-power.png");
 			}
 
-			this.$["extensionViewAlt" + inSender.view].selected(true);
+			if(this._ui != "compact") {
+				this.$["extensionViewAlt" + inSender.view].selected(true);
 
-			this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "1.0");
+				this.$["extensionIconAlt" + inSender.view].applyStyle("opacity", "1.0");
 
-			this._selectedSecondaryIcon = this.$["extensionIconAlt" + inSender.view].getSrc();
+				this._selectedSecondaryIcon = this.$["extensionIconAlt" + inSender.view].getSrc();
 
-			this.$["extensionIconAlt" + inSender.view].setSrc("./images/icon-power.png");
+				this.$["extensionIconAlt" + inSender.view].setSrc("./images/icon-power.png");
+			}
 
 			this._selectedSecondary = inSender.view;
 
@@ -753,11 +857,11 @@ enyo.kind({
 					this._servers.splice(i--, 1);
 			}
 
-			this.$.middleStatus.setContent(this._servers.length + " devices / servers found...");
-
 			this._servers.push({addr: addr, type: type});
 
 			localStorage["servers"] = enyo.json.stringify(this._servers);
+
+			this.$.middleStatus.setContent(this._servers.length + " devices / servers found...");
 		}
 	},
 	
@@ -828,10 +932,15 @@ enyo.kind({
 
 		this.$["extensionView" + inSender.view].destroy();
 
-		this.$["extensionItemAlt" + inSender.view].destroy();
+		if(this._ui != "compact") {
+			this.$["extensionItemAlt" + inSender.view].destroy();
 
-//		if(this._ui == "full")
-//			this.$["altExtensionView" + inSender.view].destroy();
+			this.$["extensionViewAlt" + inSender.view].destroy();
+		}
+		
+		this._off["extensionView" + inSender.view] = false;
+
+		this.setupExtensions();
 	},
 	
 	addControllerOption: function(inCategory, inPlatform, inID, inName, inType, inAddr) {
