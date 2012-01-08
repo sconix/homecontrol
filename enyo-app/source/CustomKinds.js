@@ -104,9 +104,17 @@ enyo.kind({
 	name: "CustomSlidingTag",
 	kind: enyo.Control,
 	
+   published: {
+   	tagClass: "custom-sliding-tag-normal"
+   },
+	
 	components: [
-		{name: "TagMarker", className: "custom-sliding-tag"}
+		{name: "TagMarker", className: "custom-sliding-tag-normal"}
 	],
+	
+	rendered: function() {
+		this.$.TagMarker.setClassName(this.tagClass);
+	},
 	
 	setPosition: function(inY) {
 		this.$.TagMarker.applyStyle('top', inY + 'px');

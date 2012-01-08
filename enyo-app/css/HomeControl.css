@@ -1,3 +1,6 @@
+
+
+
 .keyboard-input {
 	text-align: center;
 }
@@ -20,7 +23,7 @@
 }
 
 .divider-container-box {
-	margin: 0px -2px 0px 10px;
+	margin: 0px -3px 0px 10px;
 	border-style: groove;
 	min-height: 8px;
 }
