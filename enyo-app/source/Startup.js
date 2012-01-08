@@ -20,6 +20,9 @@ enyo.kind({
 						"<li>Refer to the wiki on how to configure the required device/server side for the controllers</li>" +
 						"</ul><br>"},
 
+					{kind: "Divider", caption: "0.8.4"},
+					{content: "<ul><li>Fixed bug concerning the UI rotation on TouchPad</li></ul>"},
+
 					{kind: "Divider", caption: "0.8.3"},
 					{content: "<ul><li>Several user interface fixes / changes for TouchPad</li>" +
 						"<li>Fixed other than Home Control servers not beeing saved bug</li>" +

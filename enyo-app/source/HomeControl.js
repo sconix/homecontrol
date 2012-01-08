@@ -355,6 +355,8 @@ enyo.kind({
 					this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
 				}
 			} else {
+				this._ui = "normal";
+							
 				this.$.defaultView.setPeekWidth(320);
 
 				this.$.defaultView.applyStyle("width", (size.w - 384) + "px");
