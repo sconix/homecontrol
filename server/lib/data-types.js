@@ -469,6 +469,50 @@ exports.systemInputStatus = SystemInputStatus = function(os) {
 };
 
 //
+// SYSTEM POWER API
+//
+
+/*
+	status
+	display?state=on/off/lock
+	shutdown?timer=#/now/cancel
+*/
+
+//
+// SYSTEM POWER STATUS OBJECT
+//
+
+exports.systemPowerStatus = SystemPowerStatus = function(shutdownCtl, displayCtl, screenCtl) {
+	// Public data
+
+	if(shutdownCtl)
+		this.shutdown = "idle";
+
+	if(displayCtl)
+		this.display = "on";
+
+	if(screenCtl)
+		this.screen = true;
+
+	// Public functions
+
+	this.getStatus = function(address, state) {
+		var status = {"state": state};
+		
+		if(this.shutdown != undefined)
+			status.shutdown = this.shutdown;
+
+		if(this.display != undefined)
+			status.display = this.display;
+
+		if(this.screen != undefined)
+			status.screen = this.screen;
+
+		return status;
+	}
+};
+
+//
 // SYSTEM SOUND API
 //
 

@@ -10,6 +10,7 @@ enyo.depends(
 	"source/extensions/StatusInfo.js",
 	"source/extensions/Surveillance.js",
 	"source/extensions/SystemInput.js",
+	"source/extensions/SystemPower.js",
 	"source/extensions/SystemSound.js",
 	"source/extensions/UPnPController.js",
 	"source/extensions/UPnPSpeaker.js",

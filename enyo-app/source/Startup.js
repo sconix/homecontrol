@@ -20,6 +20,10 @@ enyo.kind({
 						"<li>Refer to the wiki on how to configure the required device/server side for the controllers</li>" +
 						"</ul><br>"},
 
+					{kind: "Divider", caption: "0.8.5"},
+					{content: "<ul><li>Added menu entry for managing configured devices / servers</li>" +
+						"<li>Added support for computer power management controller</li></ul>"},
+
 					{kind: "Divider", caption: "0.8.4"},
 					{content: "<ul><li>Fixed bug concerning the UI rotation on TouchPad</li></ul>"},
 

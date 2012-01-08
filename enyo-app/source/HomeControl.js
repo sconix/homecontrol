@@ -60,7 +60,7 @@ enyo.kind({
 		{kind: "ApplicationEvents", onBack: "handleBackEvent"},
 
 		{kind: "AppMenu", components: [
-//			{caption: "Show Servers", onclick: "showAllServers"},
+			{caption: "Devices / Servers", onclick: "showAllServers"},
 /*			{caption: "Auto Discover", onclick: "autoDiscover"},*/
 			{caption: "Add Server", onclick: "addNewServer"},
 			{caption: "Help", onclick: "showHelpInfo"}
@@ -78,22 +78,20 @@ enyo.kind({
 		]},	
 
 
-/*		{name: "lstPopup", lazy: false, kind: "Popup", style: "width: 80%;max-width: 500px;", components: [
-			{content: "Server List", flex: 1, style: "text-decoration: underline;text-align: center;"},
+		{name: "lstPopup", lazy: false, kind: "Popup", style: "width: 80%;max-width: 500px;", components: [
+			{content: "Configured Devices / Servers", flex: 1, style: "text-decoration: underline;text-align: center;"},
 			{name: "srvList", kind: "VirtualList", style: "height: 250px;border-style: groove;", 
 				onSetupRow: "setupServerRow", components: [
-				{kind: "Item", tapHighlight: false, components: [
-					{layoutKind: "HFlexLayout", components: [
-						{name: "itemAddr", content: "", style: "font-size: 16px;", flex: 1},
-						{name: "itemType", content: "", className: "enyo-label"}
-					]}
+				{kind: "SwipeableItem", layoutKind: "HFlexLayout", tapHighlight: false, 
+					onConfirm: "handleDelServer", components: [
+					{name: "itemAddr", content: "", style: "font-size: 16px;", flex: 1},
+					{name: "itemType", content: "", className: "enyo-label"}
 				]}
 			]},
 			{layoutKind: "HFlexLayout", components: [
 				{kind: "Button", flex: 1, caption: "OK", onclick: "closeAllServers"}
 			]}
 		]},	
-*/
 
 		{name: "srvPopup", lazy: false, kind: "Popup", style: "width: 80%;max-width: 500px;", components: [
 			{content: "No Controllers Found", flex: 1, style: "text-decoration: underline;text-align: center;margin-bottom: 5px;"},
@@ -190,7 +188,7 @@ enyo.kind({
 			]}
 		]},	
 	
-		{name: "appPane", kind: "SlidingPane", multiViewMinWidth: 300, flex: 1, style: "background: #666666;", 
+		{name: "appPane", kind: "SlidingPane", multiViewMinWidth: 300, flex: 1, className: "hd", style: "background: #666666;", 
 			onSlideComplete: "adjustSlidingTag", components: [
 			{name: "primaryMenu", width: "320px", components: [
 				{name: "primaryPane", kind: "Pane", transitionKind: enyo.transitions.Simple, flex: 1, components: [
@@ -219,9 +217,11 @@ enyo.kind({
 						{name: "middleImage", kind: "Image", src: "images/icon-empty.png"}, 
 						{name: "middleStatus", content: "No controllers configured...", style: "margin-top: -5px; font-size: 0.7em; color: #999999;"}
 					]},
-					{layoutKind: "HFlexLayout", flex: 1, components: [
-						{name: "primaryController", kind: "Pane", style: "border-style: none groove none groove;", transitionKind: "enyo.transitions.Simple", flex: 1, components: []},
-						{name: "secondaryController", kind: "Pane", style: "border-style: none groove none groove;", transitionKind: "enyo.transitions.Simple", flex: 1, components: []}
+					{layoutKind: "HFlexLayout", flex: 1, className: "empty-sliding-view-middle", components: [
+						{layoutKind: "HFlexLayout", flex: 1, style: "margin: 0px -18px;", components: [
+							{name: "primaryController", kind: "Pane", style: "background: #D8D8D8;margin: 5px 3px;", transitionKind: "enyo.transitions.Simple", flex: 1, components: []},
+							{name: "secondaryController", kind: "Pane", style: "background: #D8D8D8;margin: 5px 3px;", transitionKind: "enyo.transitions.Simple", flex: 1, components: []}
+						]}
 					]}					
 				]}
 			]},
@@ -254,7 +254,7 @@ enyo.kind({
 
 		this.$.primaryController.hide();
 		this.$.secondaryController.hide();
-				
+
 		this.$.addButton.setActive(true);	
 		this.$.addButton.setDisabled(true);	
 		this.$.addButton.setCaption("Querying Servers...");
@@ -337,6 +337,11 @@ enyo.kind({
 			this._ui = "compact";
 		
 			enyo.setAllowedOrientation("up");
+
+			this.$.appPane.removeClass("hd");
+
+			this.$.primaryController.applyStyle("margin", "0px -2px");
+			this.$.secondaryController.applyStyle("margin", "0px -2px");
 
 			this.$.defaultView.applyStyle("width", (size.w - 64) + "px");
 		} else {
@@ -770,7 +775,7 @@ enyo.kind({
 		}			
 	},
 	
-/*	setupServerRow: function(inSender, inIndex) {
+	setupServerRow: function(inSender, inIndex) {
 		if((inIndex >= 0) && (inIndex < this._servers.length)) {
 			this.$.itemAddr.setContent(this._servers[inIndex].addr);
 
@@ -789,7 +794,6 @@ enyo.kind({
 	closeAllServers: function() {
 		this.$.lstPopup.close();
 	},
-*/	
 
 	showHelpInfo: function() {
 		this.$.hlpPopup.openAtCenter();
@@ -866,6 +870,27 @@ enyo.kind({
 			this.$.middleStatus.setContent(this._servers.length + " devices / servers found...");
 		}
 	},
+	
+	handleDelServer: function(inSender, inIndex) {
+		var addr = this._servers[inIndex].addr;
+
+		for(var i = 0; i < this._controllers.length; i++) {
+			var idx = this._controllers[i].servers.indexOf(addr);
+
+			if(idx != -1) {
+				if(this._controllers[i].servers.length > 1)
+					this._controllers[i].servers.splice(idx, 1);
+				else
+					this._controllers.splice(i--, 1);
+			}
+		}
+		
+		this._servers.splice(inIndex, 1);
+		
+		this.$.srvList.refresh();
+
+		localStorage["servers"] = enyo.json.stringify(this._servers);
+	},	
 	
 	addNewController: function() {
 		if(this._controllers.length == 0) {
