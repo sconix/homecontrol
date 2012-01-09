@@ -58,7 +58,8 @@ var loaded = [];
 var modules = ["app/amarok", "app/banshee", "app/frontrow", 
 	"app/itunes", "app/mpd", 
 	"app/quicktime", "app/rhythmbox", "app/totem", "app/winamp",
-	"sys/1-wire", "sys/input", "sys/sound", "sys/surveillance"];
+	"sys/1-wire", "sys/input", "sys/power", "sys/sound", 
+	"sys/surveillance"];
 
 //
 // NOTIFY USER
